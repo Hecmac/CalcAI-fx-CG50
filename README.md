@@ -1,5 +1,6 @@
 # Calc AI for the Casio fx-CG50
-# WIP!
+
+![Demo GIF](media/Demo.gif)
 
 **Calc AI is a tiny language model that runs locally on a Casio fx-CG50 graphing calculator.** Ask it a question it either answers from internal knowledge or formats the job to hand to a dedicated tool for calculations, unit conversions, statistics, graphs and the periodic table. The model has 2.27 million parameters running at Q4, and it generates about six tokens per second at stock clocks.
 
