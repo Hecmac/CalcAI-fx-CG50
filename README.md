@@ -1,8 +1,10 @@
 # Calc AI for the Casio fx-CG50
 
-![Demo GIF](media/Demo.gif)
+**Calc AI is a tiny language model that runs locally on a Casio fx-CG50 graphing calculator.** It can answer simple questions directly or reformats the query for a dedicated tool for caulations, unit conversions, statistics, graphs and the periodic table. The model has 2.27 million parameters running at Q4, and it generates at ~6 tok/s at stock clocks.
 
-**Calc AI is a tiny language model that runs locally on a Casio fx-CG50 graphing calculator.** Ask it a question it either answers from internal knowledge or formats the job to hand to a dedicated tool for calculations, unit conversions, statistics, graphs and the periodic table. The model has 2.27 million parameters running at Q4, and it generates about six tokens per second at stock clocks.
+<p align="center">
+  <img src="media/Demo.gif" width="600" alt="Project demonstration">
+</p>
 
 ```
 what's 9x10                  ->  Sure, let me work that out.        9*10 = 90
@@ -13,7 +15,7 @@ why is the sky blue          ->  Air scatters blue light from the sun more than 
 who won the 1998 world cup   ->  I'm not sure about that one.
 ```
 
-Arithmatic is inefficient to train in small models, so the model produces a short, plain text preamble and a symbolic action such as `<calc|9*10>` or `<plot|x^3-x^2>`, a deterministic tool evaluates it and produces the requested output. The action is hidden from the user, the result appears in the reply.
+Arithmatic is inefficient to train in small models, so the model produces a short, plain text preamble and a symbolic action such as `<calc|9*10>` or `<plot|x^3-x^2>`, a deterministic tool evaluates it and produces the requested output. 
 
 ## Installation
 
@@ -77,11 +79,11 @@ The tokenizer is a lowercase byte-level BPE with 1,024 tokens.
 
 ### 2. Training
 
-A pretraining pass (48M tokens) is followed by answer-masked supervised fine-tuning (48M tokens, about 190,000 rows, 40% of the loss on chat) and a short quantisation-aware pass that trains directly in 4-bit weights. Training took under an hour on one RTX 4060Ti. Release builds train on every phrasing and fact; research comparisons use held-out phrasings.
+A pretraining pass (48M tokens) is followed by answer-masked supervised fine-tuning (48M tokens) and a short quantisation-aware pass that trains directly in 4-bit weights. Training took under an hour on an RTX 4060Ti.
 
 ### 3. Native fx-CG50 deployment
 
-The model is a two-layer GRU with 384 hidden units and one causal attention read over the GRU outputs. Weights are 4-bit with per-row scales (about 1.18 MB); activations are 16-bit integers. Decoding uses SH-4A assembly kernels with exact integer LayerNorm and table-based sigmoid, tanh and exp. 
+The model is a two layer GRU with 384 hidden units and one causal attention read over the GRU outputs. Weights are 4-bit with per-row scales (about 1.18 MB); activations are 16-bit integers. Decoding uses SH-4A assembly kernels with exact integer LayerNorm and table-based sigmoid, tanh and exp. 
 
 Small repairs run on the model's output before the tool executes (completing list brackets, normalising units, inserting implied multiplication). 
 
@@ -102,4 +104,4 @@ The probe sets are isolated from training, but release models trains on all gene
 
 ## Licences
 
-To be added before release. 
+WIP 
